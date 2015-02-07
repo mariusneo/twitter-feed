@@ -30,6 +30,7 @@
         <module>jobs</module>
         <module>contract</module>
         <module>db-migration</module>
+        <module>domain</module>
     </modules>
 
     <dependencyManagement>
