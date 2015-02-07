@@ -12,7 +12,6 @@
     <artifactId>jobs</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>tweets-import-job</module>
         <module>words-count-job</module>
     </modules>
 

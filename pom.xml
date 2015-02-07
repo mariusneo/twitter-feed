@@ -31,6 +31,7 @@
         <module>contract</module>
         <module>db-migration</module>
         <module>domain</module>
+        <module>tweets-importer</module>
     </modules>
 
     <dependencyManagement>

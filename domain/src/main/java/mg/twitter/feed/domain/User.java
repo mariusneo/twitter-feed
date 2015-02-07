@@ -3,12 +3,18 @@ package mg.twitter.feed.domain;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "users")
 public class User extends AbstractPersistable<Long> {
+
+    @NotNull
     private String name;
 
-    private String screeName;
+    @NotNull
+    private String screenName;
 
     private String description;
 
@@ -25,12 +31,12 @@ public class User extends AbstractPersistable<Long> {
         this.name = name;
     }
 
-    public String getScreeName() {
-        return screeName;
+    public String getScreenName() {
+        return screenName;
     }
 
-    public void setScreeName(String screeName) {
-        this.screeName = screeName;
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 
     public String getDescription() {
@@ -53,7 +59,7 @@ public class User extends AbstractPersistable<Long> {
     public String toString() {
         return "User{" +
                 "id=" + getId() +
-                "screeName='" + screeName + '\'' +
+                "screenName='" + screenName + '\'' +
                 '}';
     }
 }

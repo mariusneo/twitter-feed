@@ -4,16 +4,18 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
+@Table(name = "tweets")
 public class Tweet extends AbstractPersistable<Long> {
 
     private String text;
 
     @NotNull
-    private String userId;
+    private Long userId;
 
     @NotNull
     private String userName;
@@ -32,11 +34,11 @@ public class Tweet extends AbstractPersistable<Long> {
         this.text = text;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

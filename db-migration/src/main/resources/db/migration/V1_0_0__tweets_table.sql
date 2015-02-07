@@ -8,6 +8,7 @@ CREATE SEQUENCE hibernate_sequence
 CREATE TABLE tweets
 (
     id BIGINT PRIMARY KEY NOT NULL,
+    text VARCHAR(140),
     user_id BIGINT NOT NULL,
     user_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP
