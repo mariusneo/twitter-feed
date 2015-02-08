@@ -1,0 +1,1 @@
+CREATE INDEX idx_tweets_created_at  ON tweets  (created_at);

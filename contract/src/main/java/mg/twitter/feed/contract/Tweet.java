@@ -1,11 +1,13 @@
 package mg.twitter.feed.contract;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Tweet {
-    private Long userId;
+public class Tweet implements Serializable{
 
-    private String userName;
+    private User user;
+
+    private Long id;
 
     private String text;
 
@@ -13,5 +15,35 @@ public class Tweet {
 
     public Tweet(){}
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 }
