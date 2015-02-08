@@ -10,6 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mg.twitter.feed</groupId>
-    <artifactId>db-migrations</artifactId>
+    <artifactId>db-migration</artifactId>
 
 </project>
