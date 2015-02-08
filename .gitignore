@@ -5,3 +5,4 @@ target
 .settings
 .project
 .classpath
+tweets-importer/twitter-auth.properties

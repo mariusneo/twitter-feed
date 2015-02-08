@@ -21,7 +21,6 @@ CREATE TABLE users
     id BIGINT PRIMARY KEY NOT NULL,
     name VARCHAR(255) NOT NULL,
     screen_name VARCHAR(255) NOT NULL,
-    image BYTEA,
     description VARCHAR(1024),
-    url VARCHAR(1024)
+    profile_image_url VARCHAR(1024)
 ) WITHOUT OIDS;
