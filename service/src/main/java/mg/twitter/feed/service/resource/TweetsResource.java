@@ -14,8 +14,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.status;
@@ -25,6 +32,8 @@ import static javax.ws.rs.core.Response.status;
 public class TweetsResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(TweetsResource.class);
 
+    private static final int MAX_COUNT = 100;
+
     @Autowired
     TweetRepository tweetRepository;
 
@@ -32,11 +41,31 @@ public class TweetsResource {
     UserRepository userRepository;
 
     @GET
+    @Path("/latest")
+    public List<Tweet> latestTweets(@QueryParam("count") Integer count, @QueryParam("since_id") Long sinceId) {
+        int itemCount = (count == null || count > MAX_COUNT) ? MAX_COUNT : count;
+        long sinceTweetId = sinceId == null ? 0 : sinceId;
+
+        List<mg.twitter.feed.domain.Tweet> domainTweets = tweetRepository.findLatestTweets(sinceTweetId, itemCount);
+
+        Set<Long> userIds = domainTweets.stream().map(t -> t.getUserId()).collect(Collectors.toSet());
+        List<User> users = userRepository.findAll(userIds);
+        Map<Long, User> id2DomainUserMap = new HashMap<>();
+        users.stream().forEach(u -> id2DomainUserMap.put(u.getId(), u));
+
+
+        List<Tweet> tweets = new ArrayList<>(domainTweets.size());
+        domainTweets.stream().forEach(t -> tweets.add(createTweetResponse(t, id2DomainUserMap.get(t.getUserId()))));
+        return tweets;
+    }
+
+
+    @GET
     @Path("{id}")
-    @Profiled(tag="TweetsResource.read][id:{$0}")
-    public Response readTweet(@PathParam("id") Long id){
+    @Profiled(tag = "TweetsResource.read][id:{$0}")
+    public Response readTweet(@PathParam("id") Long id) {
         mg.twitter.feed.domain.Tweet domainTweet = tweetRepository.findOne(id);
-        if (domainTweet == null){
+        if (domainTweet == null) {
             return status(NOT_FOUND).build();
         }
 
@@ -45,7 +74,7 @@ public class TweetsResource {
         return Response.ok(createTweetResponse(domainTweet, domainTweetUser)).build();
     }
 
-    private Tweet createTweetResponse(mg.twitter.feed.domain.Tweet domainTweet, User domainUser){
+    private Tweet createTweetResponse(mg.twitter.feed.domain.Tweet domainTweet, User domainUser) {
         Tweet tweet = new Tweet();
         tweet.setId(domainTweet.getId());
         tweet.setCreatedAt(domainTweet.getCreatedAt());
