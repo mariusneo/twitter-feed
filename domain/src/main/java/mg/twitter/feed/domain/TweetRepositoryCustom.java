@@ -7,8 +7,11 @@ import java.util.List;
 public interface TweetRepositoryCustom {
 
     @Transactional(readOnly = true)
-    public List<Tweet> findLatestTweets(long sinceTweetId, int count);
+    List<Tweet> findLatestTweets(long sinceTweetId, int count);
 
     @Transactional(readOnly = true)
-    public List<Tweet> findLatestTweets(int count);
+    List<Tweet> findLatestTweets(int count);
+
+    @Transactional(readOnly = true)
+    boolean updatesAvaiable(long sinceTweetId);
 }

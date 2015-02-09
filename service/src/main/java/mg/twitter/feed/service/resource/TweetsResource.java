@@ -1,6 +1,7 @@
 package mg.twitter.feed.service.resource;
 
 import mg.twitter.feed.contract.Tweet;
+import mg.twitter.feed.contract.UpdateStatus;
 import mg.twitter.feed.domain.TweetRepository;
 import mg.twitter.feed.domain.User;
 import mg.twitter.feed.domain.UserRepository;
@@ -44,13 +45,9 @@ public class TweetsResource {
     @Path("/latest")
     @JSONP(queryParam = "callback")
     @Produces({"application/x-javascript", "application/json"})
-    @Profiled(tag = "TweetsResource.latestTweets][since_id:{$1}")
-    public List<Tweet> latestTweets(@QueryParam("count") Integer count, @QueryParam("since_id") Long sinceId,
+    @Profiled(tag = "TweetsResource.latestTweets][since_id:{$0}")
+    public List<Tweet> latestTweets(@QueryParam("since_id") Long sinceId,@QueryParam("count") Integer count,
                                     @QueryParam("callback") String callback) {
-        return genericLatestTweets(count, sinceId);
-    }
-
-    private List<Tweet> genericLatestTweets(Integer count, Long sinceId){
         int itemCount = (count == null || count > MAX_COUNT) ? MAX_COUNT : count;
         long sinceTweetId = sinceId == null ? 0 : sinceId;
 
@@ -67,6 +64,19 @@ public class TweetsResource {
         return tweets;
     }
 
+
+    @GET
+    @Path("/updatestatus")
+    @JSONP(queryParam = "callback")
+    @Produces({"application/x-javascript", "application/json"})
+    @Profiled(tag = "TweetsResource.checkForUpdates][since_id:{$0}")
+    public UpdateStatus checkForUpdates(@QueryParam("since_id") long sinceId,
+                                        @QueryParam("callback") String callback){
+        UpdateStatus updateStatus= new UpdateStatus();
+        updateStatus.setSinceTweetId(sinceId);
+        updateStatus.setAvailable(tweetRepository.updatesAvaiable(sinceId));
+        return updateStatus;
+    }
 
     @GET
     @Path("{id}")
