@@ -1,10 +1,23 @@
 Twitter Feed
 =============================================
 
+## Introduction
+
+The main functionality offered by this project is a local Twitter feed.
+
 The purpose of the project is to make some experimentation with twitter feeds in order to get an idea on how to
 structure the tweets in order to make them available in a timely fashion when their number grows.
 
-Tweets are imported via a quartz job directly from Twitter and stored in a Postgres database.
+Tweets are imported via a too directly from Twitter API (via twitter4j-stream) and stored in a Postgres database.
+A REST webservice delivers on request the tweets to the web server or (via JSONP) to AJAX handlers in the web UI.
+
+Since there is currently not much logic within the project, it can be used as a tutorial for spring-boot MVC or
+spring-boot jersey REST.
+
+DISCLOSURE : The web UI is using a great deal of code adapted from from this tutorial project :
+
+https://github.com/scotch-io/react-tweets
+
 
 ## Frameworks
 
