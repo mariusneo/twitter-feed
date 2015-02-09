@@ -8,10 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletContext;
+
 @Controller
 public class FeedController {
     private static final int TWEETS_PER_PAGE = 20;
 
+    @Autowired
+    ServletContext sc;
 
     @Autowired
     TweetsResourceClient tweetsResourceClient;
@@ -19,6 +23,7 @@ public class FeedController {
     @RequestMapping("/")
     public String feed(Model model) {
         Tweet[] tweets = tweetsResourceClient.findLatestTweets(20);
+
         model.addAttribute("tweets", tweets);
         return "feed";
     }

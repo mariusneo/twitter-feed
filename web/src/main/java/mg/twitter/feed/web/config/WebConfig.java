@@ -15,4 +15,17 @@ public class WebConfig {
         return new TweetsResourceClient(twitterFeedServiceUrl);
     }
 
+
+    @Bean(name = "urlService")
+    public UrlService urlService() {
+        return new UrlService() {
+            @Override
+            public String getServiceApplicationUrl() {
+                return twitterFeedServiceUrl;
+            }
+        };
+    }
+
 }
+
+

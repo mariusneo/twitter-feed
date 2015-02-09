@@ -4,6 +4,7 @@ import mg.twitter.feed.contract.Tweet;
 import mg.twitter.feed.domain.TweetRepository;
 import mg.twitter.feed.domain.User;
 import mg.twitter.feed.domain.UserRepository;
+import org.glassfish.jersey.server.JSONP;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,8 +29,6 @@ import java.util.stream.Collectors;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.status;
 
-@Component
-@Produces(MediaType.APPLICATION_JSON)
 public class TweetsResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(TweetsResource.class);
 
@@ -42,7 +42,15 @@ public class TweetsResource {
 
     @GET
     @Path("/latest")
-    public List<Tweet> latestTweets(@QueryParam("count") Integer count, @QueryParam("since_id") Long sinceId) {
+    @JSONP(queryParam = "callback")
+    @Produces({"application/x-javascript", "application/json"})
+    @Profiled(tag = "TweetsResource.latestTweets][since_id:{$1}")
+    public List<Tweet> latestTweets(@QueryParam("count") Integer count, @QueryParam("since_id") Long sinceId,
+                                    @QueryParam("callback") String callback) {
+        return genericLatestTweets(count, sinceId);
+    }
+
+    private List<Tweet> genericLatestTweets(Integer count, Long sinceId){
         int itemCount = (count == null || count > MAX_COUNT) ? MAX_COUNT : count;
         long sinceTweetId = sinceId == null ? 0 : sinceId;
 
@@ -62,6 +70,7 @@ public class TweetsResource {
 
     @GET
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @Profiled(tag = "TweetsResource.read][id:{$0}")
     public Response readTweet(@PathParam("id") Long id) {
         mg.twitter.feed.domain.Tweet domainTweet = tweetRepository.findOne(id);

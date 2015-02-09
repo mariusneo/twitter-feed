@@ -1,7 +1,9 @@
 package mg.twitter.feed.contract;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
+@XmlRootElement
 public class User implements Serializable{
     private Long id;
 

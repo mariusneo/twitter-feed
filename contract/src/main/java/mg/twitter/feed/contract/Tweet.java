@@ -1,8 +1,10 @@
 package mg.twitter.feed.contract;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 
+@XmlRootElement
 public class Tweet implements Serializable{
 
     private User user;
