@@ -4,8 +4,6 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -13,9 +11,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "users")
 public class User implements Persistable<Long> {
-
-
-
     @Id
     private Long id;
 

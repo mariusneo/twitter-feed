@@ -23,7 +23,7 @@ public class JdbConfig {
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
         entityManagerFactoryBean.setPersistenceUnitName("tweetsPU");
-        entityManagerFactoryBean.setPackagesToScan("mg.twitter.feed.domain");
+        entityManagerFactoryBean.setPackagesToScan("mg.twitter.feed.domain", "mg.twitter.feed.jobs.countwords.domain");
         entityManagerFactoryBean.setJpaProperties(hibProperties());
         return entityManagerFactoryBean;
     }

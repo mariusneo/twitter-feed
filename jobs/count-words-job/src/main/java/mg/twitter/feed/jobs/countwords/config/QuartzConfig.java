@@ -58,6 +58,22 @@ public class QuartzConfig {
     @Value("${org.quartz.jobStore.isClustered}")
     private String quartzJobStoreClustered;
 
+    private static JobDetailFactoryBean createJobDetail(Class jobClass) {
+        JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
+        factoryBean.setJobClass(jobClass);
+        // job has to be durable to be stored in DB:
+        factoryBean.setDurability(true);
+        return factoryBean;
+    }
+
+    private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs) {
+        SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
+        factoryBean.setJobDetail(jobDetail);
+        factoryBean.setStartDelay(0L);
+        factoryBean.setRepeatInterval(pollFrequencyMs);
+        factoryBean.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
+        return factoryBean;
+    }
 
     @Bean
     public SpringBeanJobFactory quartzSpringBeanJobFactory(ApplicationContext applicationContext) {
@@ -77,7 +93,7 @@ public class QuartzConfig {
         // this allows to update triggers in DB when updating settings in config file:
         factory.setOverwriteExistingJobs(true);
 
-        factory.setTriggers(countTweetsWordsJobTrigger,releasePendingTweetsJobTrigger);
+        factory.setTriggers(countTweetsWordsJobTrigger, releasePendingTweetsJobTrigger);
 
 
         Properties quartzProperties = new Properties();
@@ -106,23 +122,6 @@ public class QuartzConfig {
         factory.setQuartzProperties(quartzProperties);
 
         return factory;
-    }
-
-    private static JobDetailFactoryBean createJobDetail(Class jobClass) {
-        JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
-        factoryBean.setJobClass(jobClass);
-        // job has to be durable to be stored in DB:
-        factoryBean.setDurability(true);
-        return factoryBean;
-    }
-
-    private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs) {
-        SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
-        factoryBean.setJobDetail(jobDetail);
-        factoryBean.setStartDelay(0L);
-        factoryBean.setRepeatInterval(pollFrequencyMs);
-        factoryBean.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
-        return factoryBean;
     }
 
     @Bean(name = "countTweetsWordsJobDetail")

@@ -11,7 +11,8 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;
  * <p/>
  * Source retrieved from : https://gist.github.com/jelies/5085593
  *
- * @author jelies (thanks to Brian Matthews: http://webcache.googleusercontent.com/search?q=cache:FH-N1i--sDgJ:blog.btmatthews.com/2011/09/24/inject-application-context-dependencies-in-quartz-job-beans/+&cd=7&hl=en&ct=clnk&gl=es)
+ * @author jelies (thanks to Brian Matthews: http://webcache.googleusercontent.com/search?q=cache:FH-N1i--sDgJ:blog
+ * .btmatthews.com/2011/09/24/inject-application-context-dependencies-in-quartz-job-beans/+&cd=7&hl=en&ct=clnk&gl=es)
  */
 public final class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory implements ApplicationContextAware {
 
