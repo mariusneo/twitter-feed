@@ -21,7 +21,7 @@ public class CountTweetWordsService {
     @Async
     @Transactional
     public void processCountWordsTweet(CountWordsTweet countWordsTweet) {
-        Long tweetId = countWordsTweet.getTweetId();
+        Long tweetId = countWordsTweet.getId();
 
         Tweet tweet = tweetRepository.findOne(tweetId);
 

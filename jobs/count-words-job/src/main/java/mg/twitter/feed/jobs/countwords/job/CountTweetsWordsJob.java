@@ -34,7 +34,7 @@ public class CountTweetsWordsJob implements Job {
             String jobKey = context.getJobDetail().getKey().toString();
             List<CountWordsTweet> countWordsTweets = countWordsTweetRepository.findNewCountWordsTweets(limit);
 
-            List<Long> tweetIds = countWordsTweets.stream().map(t -> t.getTweetId()).collect(Collectors.toList());
+            List<Long> tweetIds = countWordsTweets.stream().map(t -> t.getId()).collect(Collectors.toList());
 
             if (tweetIds.size() > 0) {
                 countWordsTweetRepository.updateStatus(tweetIds, CountWordsTweetStatus.PROCESSING);

@@ -1,7 +1,6 @@
 package mg.twitter.feed.domain;
 
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -59,41 +58,21 @@ public class User implements Persistable<Long> {
         this.profileImageUrl = profileImageUrl;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.data.domain.Persistable#getId()
-     */
     public Long getId() {
 
         return id;
     }
 
-    /**
-     * Sets the id of the entity.
-     *
-     * @param id the id to set
-     */
     public void setId(final Long id) {
 
         this.id = id;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.data.domain.Persistable#isNew()
-     */
     public boolean isNew() {
 
         return null == getId();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
 
@@ -109,7 +88,7 @@ public class User implements Persistable<Long> {
             return false;
         }
 
-        AbstractPersistable<?> that = (AbstractPersistable<?>) obj;
+        Persistable<?> that = (Persistable<?>) obj;
 
         return null == this.getId() ? false : this.getId().equals(that.getId());
     }

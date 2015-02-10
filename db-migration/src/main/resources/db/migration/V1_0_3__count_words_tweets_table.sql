@@ -1,4 +1,4 @@
-CREATE TABLE words_count_tweets
+CREATE TABLE count_words_tweets
 (
     tweet_id BIGINT PRIMARY KEY NOT NULL,
     created_at TIMESTAMP NOT NULL,
@@ -7,17 +7,17 @@ CREATE TABLE words_count_tweets
 ) WITHOUT OIDS;
 
 
-CREATE INDEX idx_words_count_tweets_status  ON words_count_tweets  (tweet_id)
+CREATE INDEX idx_count_words_tweets_status  ON count_words_tweets  (tweet_id)
     WHERE status='INITIAL';
 
 
 
-CREATE OR REPLACE FUNCTION insert_tweet_into_words_count_tweets()
+CREATE OR REPLACE FUNCTION insert_tweet_into_count_words_tweets()
   RETURNS trigger AS
 $BODY$
 BEGIN
 
-INSERT INTO words_count_tweets(tweet_id,created_at, updated_at, status)
+INSERT INTO count_words_tweets(tweet_id,created_at, updated_at, status)
 VALUES(NEW.id,now(),now(),'INITIAL');
 
 RETURN NEW;
@@ -26,8 +26,8 @@ $BODY$
 LANGUAGE plpgsql;
 
 
-CREATE TRIGGER tweets_words_count_trigger
+CREATE TRIGGER tweets_count_words_trigger
   AFTER INSERT
   ON tweets
   FOR EACH ROW
-  EXECUTE PROCEDURE insert_tweet_into_words_count_tweets();
+  EXECUTE PROCEDURE insert_tweet_into_count_words_tweets();
