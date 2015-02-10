@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>mg.twitter.feed</groupId>
-            <artifactId>db-migrations</artifactId>
+            <artifactId>db-migration</artifactId>
             <version>${project.version}</version>
         </dependency>
 
