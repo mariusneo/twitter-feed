@@ -2,7 +2,7 @@ package mg.twitter.feed.jobs.countwords.config;
 
 import mg.twitter.feed.jobs.common.AutowiringSpringBeanJobFactory;
 import mg.twitter.feed.jobs.countwords.job.CountTweetsWordsJob;
-import mg.twitter.feed.jobs.countwords.job.ReleasePendingTweetsJob;
+import mg.twitter.feed.jobs.countwords.job.RemoveOutdatedTweetWordsJob;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
@@ -86,14 +87,14 @@ public class QuartzConfig {
     public SchedulerFactoryBean quartzScheduler(
             JobFactory jobFactory,
             @Qualifier("countTweetsWordsJobTrigger") Trigger countTweetsWordsJobTrigger,
-            @Qualifier("releasePendingTweetsJobTrigger") Trigger releasePendingTweetsJobTrigger) {
+            @Qualifier("removeOutdatedTweetWordsJobTrigger") Trigger removeOutdatedTweetWordsJobTrigger) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setJobFactory(jobFactory);
 
         // this allows to update triggers in DB when updating settings in config file:
         factory.setOverwriteExistingJobs(true);
 
-        factory.setTriggers(countTweetsWordsJobTrigger, releasePendingTweetsJobTrigger);
+        factory.setTriggers(countTweetsWordsJobTrigger, removeOutdatedTweetWordsJobTrigger);
 
 
         Properties quartzProperties = new Properties();
@@ -136,15 +137,19 @@ public class QuartzConfig {
         return createTrigger(countTweetsWordsJobDetail, frequency);
     }
 
-    @Bean(name = "releasePendingTweetsJobDetail")
-    public JobDetailFactoryBean releasePendingTweetsJobDetail() {
-        return createJobDetail(ReleasePendingTweetsJob.class);
+    @Bean(name = "removeOutdatedTweetWordsJobDetail")
+    public JobDetailFactoryBean removeOutdatedTweetWordsJobDetail() {
+        return createJobDetail(RemoveOutdatedTweetWordsJob.class);
     }
 
-    @Bean(name = "releasePendingTweetsJobTrigger")
-    public SimpleTriggerFactoryBean releasePendingTweetsJobTrigger(
-            @Qualifier("releasePendingTweetsJobDetail") JobDetail releasePendingTweetsJobDetail,
-            @Value("${release.pending.tweets.job.frequency}") long frequency) {
-        return createTrigger(releasePendingTweetsJobDetail, frequency);
+    @Bean(name = "removeOutdatedTweetWordsJobTrigger")
+    public CronTriggerFactoryBean removeOutdatedTweetWordsJobTrigger(
+            @Qualifier("removeOutdatedTweetWordsJobDetail") JobDetail removeOutdatedTweetWordsJobDetail) {
+        CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
+        factoryBean.setJobDetail(removeOutdatedTweetWordsJobDetail);
+        factoryBean.setStartDelay(0L);
+        // let the job run at the end of each minute
+        factoryBean.setCronExpression("59 * * * * ?");
+        return factoryBean;
     }
 }
