@@ -1,0 +1,20 @@
+text {
+    font: 10px sans-serif;
+}
+
+div.centered
+{
+    text-align: center;
+}
+
+div.centered table
+{
+    margin: 0 auto;
+    text-align: left;
+    border-collapse:collapse;
+}
+
+table,th, td
+{
+border: 1px solid gray;
+}
