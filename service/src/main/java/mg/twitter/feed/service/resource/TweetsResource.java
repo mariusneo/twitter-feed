@@ -140,6 +140,7 @@ public class TweetsResource {
         }
     }
 
+
     private Tweet createTweetResponse(mg.twitter.feed.domain.Tweet domainTweet, User domainUser) {
         Tweet tweet = new Tweet();
         tweet.setId(domainTweet.getId());

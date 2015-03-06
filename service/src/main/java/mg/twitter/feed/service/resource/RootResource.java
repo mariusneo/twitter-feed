@@ -15,4 +15,9 @@ public class RootResource {
     public TweetsResource tweets(@Context ResourceContext resourceContext) {
         return resourceContext.getResource(TweetsResource.class);
     }
+
+    @Path("popularwords")
+    public PopularWordsResource popularWords(@Context ResourceContext resourceContext) {
+        return resourceContext.getResource(PopularWordsResource.class);
+    }
 }
