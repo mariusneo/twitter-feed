@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -57,8 +58,12 @@ public class CountTweetWordsService {
 
         for (Map.Entry<String,Integer> entry : word2countMap.entrySet()) {
             Jedis jedis = new Jedis(redisUrl);
-            jedis.zincrby("tweets.minutes:" + tweetsSetIndex, entry.getValue(), entry.getKey());
-            jedis.zincrby("tweets.totals", entry.getValue(), entry.getKey());
+            // Use a transaction for performing multiple ordered set update operations
+            Transaction tx = jedis.multi();
+            tx.zincrby("tweets.minutes:" + tweetsSetIndex, entry.getValue(), entry.getKey());
+            tx.zincrby("tweets.totals", entry.getValue(), entry.getKey());
+            tx.exec();
+
             jedis.disconnect();
         }
 

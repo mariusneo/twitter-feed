@@ -14,9 +14,20 @@ A REST webservice delivers on request the tweets to the web server or (via JSONP
 Since there is currently not much logic within the project, it can be used as a tutorial for spring-boot MVC or
 spring-boot jersey REST.
 
+
+Once the tweets are imported in Postgres, their words get counted and they get added into redis sorted sets for
+building a statistic of the most frequent words used in the tweets in the last few minutes.
+For displaying the statistic of the most popular words, d3js library is being used.
+
+Screenshots of the web application are available below :
+
+![Twitter feed functionality](twitter-feed.png)
+
 DISCLOSURE : The web UI is using a great deal of code adapted from from this tutorial project :
 
 https://github.com/scotch-io/react-tweets
+
+![Tweets words statistics functionality](words-statistics.png)
 
 
 ## Frameworks
@@ -51,3 +62,7 @@ request in the project service.
 
 The javascript functionality on the web UI client side is implemented by using this library.
 
+
+### jedis
+The redis client library is used for interacting with the redis server in building the statistics of the most
+frequent words in the last 5 minutes.
