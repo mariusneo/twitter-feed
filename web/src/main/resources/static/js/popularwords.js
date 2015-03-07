@@ -16,17 +16,22 @@ $(document).ready(function (){
         .attr("height", diameter)
         .attr("class", "bubble");
 
+    retrievePopularWords();
 
-    $.ajax({
-            url: serviceApiUrl + "/popularwords",
-            dataType: 'jsonp',
-            success: function(words2count) {
-                build_bubbles(words2count);
-            }
-    });
+    function retrievePopularWords(){
+        $.ajax({
+                url: serviceApiUrl + "/popularwords",
+                dataType: 'jsonp',
+                success: function(words2count) {
+                    buildBubbles(words2count);
+                    // refresh the view every five seconds.
+                    setTimeout(retrievePopularWords, 5000);
+                }
+        });
+    }
 
 
-    function build_bubbles(words2count){
+    function buildBubbles(words2count){
         var wordList=[]; //each word one entry and contains the total count [ {cnt:30,title_list:[3,5,9],
         var wordCount=[];
         var wordMap={};
@@ -96,12 +101,15 @@ $(document).ready(function (){
           dobj.push({"key":di,"value":data[1][di]});
         }
 
-        display_pack({children: dobj}, data);
+        displayPack({children: dobj}, data);
     }
 
-    function display_pack(root, data)
+    function displayPack(root, data)
     {
-      var node = svg.selectAll(".node")
+        // clear content previously stored in the svg node
+        $('#svgid > svg').empty();
+
+        var node = svg.selectAll(".node")
           .data(bubble.nodes(root)
           .filter(function(d) { return !d.children; }))
         .enter().append("g")
@@ -128,23 +136,16 @@ $(document).ready(function (){
         })
         ;
 
-      /*node.append("title")
-          .text(function(d) { return data[0][d.key] + ": " + format(d.value); });
-    */
-      node.append("circle")
+        node.append("circle")
           .attr("r", function(d) { return d.r; })
           ;
-          //.style("fill", function(d) { return color(data[0][d.key]); });
 
-      node.append("text")
+        node.append("text")
           .attr("dy", ".3em")
           .style("text-anchor", "middle")
           .style("fill","black")
           .text(function(d) { return data[0][d.key].substring(0, d.r / 3); });
     }
-    //);
-
-
 
     function showToolTip(pMessage,pX,pY,pShow)
     {
@@ -155,7 +156,6 @@ $(document).ready(function (){
             $('body').append(tooltipDivID);
       }
       if (!pShow) { tooltipDivID.hide(); return;}
-      //MT.tooltipDivID.empty().append(pMessage);
       tooltipDivID.html(pMessage);
       tooltipDivID.css({top:pY,left:pX});
       tooltipDivID.show();
