@@ -48,11 +48,13 @@ public class RemoveOutdatedTweetWordsJob implements Job {
                     } else {
                         jedis1.zincrby("tweets.totals", -tuple.getScore(), tuple.getElement());
                     }
+                    jedis1.disconnect();
                 });
                 index += BUCKET_LIMIT;
             }
 
             jedis.del(outdatedTweetsSetName);
+            jedis.disconnect();
 
             tag = String.format("RemoveOutdatedTweetWordsJob.success] job[%s] trigger[%s] processed[%d", jobKey,
                     triggerKey, itemsCount);

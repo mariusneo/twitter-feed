@@ -4,6 +4,8 @@ import mg.twitter.feed.domain.Tweet;
 import mg.twitter.feed.domain.TweetRepository;
 import mg.twitter.feed.jobs.countwords.domain.CountWordsTweet;
 import mg.twitter.feed.jobs.countwords.domain.CountWordsTweetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -17,8 +19,9 @@ import java.util.Map;
 
 @Service
 public class CountTweetWordsService {
-    public static final  int MINUTES_COUNT = 5;
 
+    public static final int MINUTES_COUNT = 5;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CountTweetWordsService.class);
     @Autowired
     private CountWordsTweetRepository countWordsTweetRepository;
 
@@ -38,7 +41,7 @@ public class CountTweetWordsService {
         Map<String, Integer> word2countMap = new HashMap<>();
 
         // processing
-        System.out.println(tweet.getText());
+        LOGGER.info(tweet.getText());
 
         for (String word : tweet.getText().split(" ")){
             if (word.trim().length()==0) continue;
@@ -56,8 +59,8 @@ public class CountTweetWordsService {
             Jedis jedis = new Jedis(redisUrl);
             jedis.zincrby("tweets.minutes:" + tweetsSetIndex, entry.getValue(), entry.getKey());
             jedis.zincrby("tweets.totals", entry.getValue(), entry.getKey());
+            jedis.disconnect();
         }
-
 
         // in OK case, delete the entry
         countWordsTweetRepository.delete(tweetId);
