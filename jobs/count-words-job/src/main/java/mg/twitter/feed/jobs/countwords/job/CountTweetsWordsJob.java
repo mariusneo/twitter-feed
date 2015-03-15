@@ -32,6 +32,8 @@ public class CountTweetsWordsJob implements Job {
         try {
             String triggerKey = context.getTrigger().getKey().toString();
             String jobKey = context.getJobDetail().getKey().toString();
+
+            //TODO add SELECT FOR UPDATE LOCKING
             List<CountWordsTweet> countWordsTweets = countWordsTweetRepository.findNewCountWordsTweets(limit);
 
             List<Long> tweetIds = countWordsTweets.stream().map(t -> t.getId()).collect(Collectors.toList());

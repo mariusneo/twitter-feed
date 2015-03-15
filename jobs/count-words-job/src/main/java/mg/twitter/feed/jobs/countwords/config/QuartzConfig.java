@@ -149,7 +149,7 @@ public class QuartzConfig {
         factoryBean.setJobDetail(removeOutdatedTweetWordsJobDetail);
         factoryBean.setStartDelay(0L);
         // let the job run at the end of each minute
-        factoryBean.setCronExpression("59 * * * * ?");
+        factoryBean.setCronExpression("1 * * * * ?");
         return factoryBean;
     }
 }

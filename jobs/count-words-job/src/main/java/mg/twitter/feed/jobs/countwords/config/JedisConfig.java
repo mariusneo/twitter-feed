@@ -1,4 +1,4 @@
-package mg.twitter.feed.service.config;
+package mg.twitter.feed.jobs.countwords.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
